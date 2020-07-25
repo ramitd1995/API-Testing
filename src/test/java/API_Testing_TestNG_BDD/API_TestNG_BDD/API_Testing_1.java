@@ -2,6 +2,8 @@ package API_Testing_TestNG_BDD.API_TestNG_BDD;
 
 import static com.jayway.restassured.RestAssured.given;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import com.jayway.restassured.http.ContentType;
@@ -12,137 +14,88 @@ import static org.hamcrest.Matchers.lessThan;
 
 public class API_Testing_1 {
 	
-	@Test(description = "Sample Test for Get API", enabled = false)
+	@Test(description = "Get API method", enabled = false)
 	public void getAPI(){
 		
-		
-		 Response resp = given().auth()
-				        .basic("ramitdlambdatest", "Ar7sr82ACbQXRi23ujktWaSuBRq9jOjInvBaelieyC00XavZUP")
-						.param("build_id","155913")
-						.when()
-						.get("https://api.lambdatest.com/automation/api/v1/builds");
+		 Response response = given()
+							.param("isGlobal",true)
+							.param("name", "Wells Fargo")
+							.when()
+							.get("http://localhost:3000/Banking");
 		 
-		int statusCode = resp.getStatusCode();
-		System.out.println(statusCode);
-		 
-		Assert.assertEquals(statusCode, 200,"GET API did not respond");
-						 
-		 
-		 ArrayList<String> json= resp.
-		 						then().
-		 						contentType(ContentType.JSON).
-		 						extract().
-		 						path("data");  // json expression paths
-		
-		//System.out.println(resp.asString());	
-		System.out.println(json);	
-		
-		
+		Assert.assertEquals(response.getStatusCode(), 200,"GET API failed to respond");
+		System.out.println(response.asString());						 		 			
 	}
 	
 	
-	
-	@Test(description = "Sample Test for POST API", enabled = false)
+	@Test(description = "POST API method", enabled = false)
 	public void postAPI(){
 		
-		 Response resp = given().
-				 		body(" { \"id\": 2, \"title\": \"sent-from-post-api\", \"author\": \"ramit-dhamija\" }").
-				 		when().
-				 		contentType(ContentType.JSON).
-				 		post("http://localhost:3000/posts");
-		 
-		 				System.out.println(resp.asString());	// Updates the db.json file with new info in post object
+		 Response response = given().
+					 		body(" { \"id\": 2, \"name\": \"Tesla\", \"ceo\": \"Elon Musk\", \"isGlobal\": true }").
+					 		when().
+					 		contentType(ContentType.JSON).
+					 		post("http://localhost:3000/Automobile");
+		 				
+		                Assert.assertEquals(response.getStatusCode(), 201,"POST API failed to respond");
+		 				System.out.println(response.asString());
 	}	
 	
 	
-	
-	@Test(description = "Sample Test for POST API using PostClass object", enabled = false)
-	public void postClassAPI(){
-		
-		PostClass postJson = new PostClass();
-		postJson.setID("4");
-		postJson.setTitle("using-Post-Class");
-		postJson.setAuthor("Youtube");
-		
-		 Response resp = given().
-				 		body(postJson).
-				 		when().
-				 		contentType(ContentType.JSON).
-				 		post("http://localhost:3000/posts");
-		 
-		 				System.out.println(resp.asString());	// Updates the db.json file with new info in post object
-	}	
-	
-	
-	@Test(description = "Sample Test for PUT API", enabled = false)
+	@Test(description = "PUT API method", enabled = false)
 	public void putAPI(){
 		
 		
-		 Response resp = given().
-				 		body("{\r\n" + 
-				 				"  \"name\": \"morpheus\",\r\n" + 
-				 				"  \"job\": \"zion resident\"\r\n" + 
-				 				"} ").
-				 		when().
-				 		contentType(ContentType.JSON).
-				 		put("https://reqres.in/api/users/2");
-		 
-		 				System.out.println(resp.asString());	// Updates the db.json file with updated info 
+		 Response response = given().
+					 		body("{\"id\":2,\"name\":\"Ebay\",\"ceo\":\"Jamie Iannone\"}").
+					 		when().
+					 		contentType(ContentType.JSON).
+					 		put("http://localhost:3000/E-Commerce/2");
+		 				
+		 				Assert.assertEquals(response.getStatusCode(), 200,"PUT API failed to respond");
+		 				System.out.println(response.asString());	 
 	}
 	
-	@Test(description = "Sample Test for PATCH API", enabled = false)
+	@Test(description = "PATCH API method", enabled = false)
 	public void patchAPI(){
 		
 		
-		 Response resp = given().
-				 		auth()
-				 		.basic("ramitdlambdatest", "Ar7sr82ACbQXRi23ujktWaSuBRq9jOjInvBaelieyC00XavZUP").
-				 		body("{\r\n" + 
-				 				"  \"name\": \"mytest\",\r\n" + 
-				 				"  \"status_ind\": \"passed\"\r\n" + 
-				 				"} ").
+		 Response response = given().
+				 		body("{\"name\": \"Fabric\"}").
 				 		when().
 				 		contentType(ContentType.JSON).
-				 		patch("https://api.lambdatest.com/automation/api/v1/sessions/3174bc61-963a-4ae4-894b-c3cec7c50938");
+				 		patch("http://localhost:3000/E-Commerce/1");
 		 
-		 				System.out.println(resp.asString());	
+		 			Assert.assertEquals(response.getStatusCode(), 200,"PATCH API failed to respond");	
+		 			System.out.println(response.asString());	
 	}	
 	
-	@Test(description = "Sample Test for Delete API", enabled = false)
+	
+	@Test(description = "Delete API method", enabled = false)
 	public void deleteAPI(){
 		
-		 Response resp = given().
-				 		auth().	
-				 		basic("ramitdlambdatest", "Ar7sr82ACbQXRi23ujktWaSuBRq9jOjInvBaelieyC00XavZUP").
-				 		when().
-				 		delete("https://api.lambdatest.com/automation/api/v1/builds/155913");
+		 Response response = given().
+					 		 when().
+					 		 delete("http://localhost:3000/Banking/1");
 		 
-		 				System.out.println(resp.asString());	
+		 			Assert.assertEquals(response.getStatusCode(), 200,"DELETE API failed to respond");	
+		 			System.out.println(response.asString());		
 	}	
 	
 	@Test(description = "API Response Time", enabled = true)
 	public void responseTime(){
 		
-		 Response resp = given().
-				 		when().
-				 		get("http://localhost:3000/posts");
+		 Response response = given().
+					 		 when().
+					 		 get("http://localhost:3000/E-Commerce");
 		 
-		 Long time = resp.
-				 	 then().
-				 	 extract().
-				 	 time();
+		 Long responseTime = response.
+						 	 then().
+						 	 extract().
+						 	 time();
 				 		
-		 			 System.out.println(resp.asString());
-		 			 System.out.println("================================================================================================");
-		 			 System.out.println("Response Time = " + time);
-		 			 
-		 			// API response Time assertion
-		 			 
-		 			 given().
-		 			 when().
-		 			 get().
-		 			 then().
-		 			 and().
-		 			 time(lessThan(800L));
+		 			 System.out.println(response.asString());
+		 			 System.out.println("Response Time = " + responseTime);
+		 			 		
 	}	
   }
