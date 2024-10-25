@@ -1,4 +1,4 @@
-# API-Testing
+# API-Testing with RestAssured
 
 Youtube reference: https://www.youtube.com/playlist?list=PLD_oMT3yQBF-ZB4EIRYKP1BQLhzzDmEPD
 
